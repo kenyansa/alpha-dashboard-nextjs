@@ -34,7 +34,14 @@ export default function Page() {
           width={1000}
           height={760}
           className='hidden md:block'
-          alt='screenshots of the dashboard project'
+          alt='desktop screenshots of the dashboard project'
+          />
+           <Image
+          src="/hero-mobile.png"
+          width={560}
+          height={620}
+          className='block md:hidden'
+          alt='screenshots of the dashboard project for mobile view'
           />
         </div>
           <div className={styles.shape}></div>  
