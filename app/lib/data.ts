@@ -82,8 +82,8 @@ export async function fetchCardData() {
       totalPendingInvoices,
     };
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch card data.');
+    console.error('Error in fetchCardData:', error);
+    throw new Error('Failed to fetch card data. See console for details.');
   }
 }
 
