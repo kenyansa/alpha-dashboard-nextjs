@@ -12,6 +12,7 @@ const iconMap = {
   pending: ClockIcon,
   invoices: InboxIcon,
 };
+import { fetchCardData } from '@/app/lib/data';
 
 export default async function CardWrapper() {
   return (
