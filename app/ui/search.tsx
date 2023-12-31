@@ -8,6 +8,11 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
   function handleSearch(term: string){
     const params = new URLSearchParams(SearchParams)
+    if(term){
+      params.set('query', term);
+    }else {
+      params.delete('query');
+    }
     console.log(term);
     
   }
