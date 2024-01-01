@@ -13,6 +13,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
     console.log(`Searching... ${term}`);
 
     const params = new URLSearchParams(SearchParams)
+    params.set('page', '1')
     if(term){
       params.set('query', term);
     }else {
@@ -22,7 +23,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
     // The URL is updated without reloading the page
     
   }, 3000);
-  
+
   return (
     <div className="relative flex flex-1 flex-shrink-0">
       <label htmlFor="search" className="sr-only">
