@@ -8,6 +8,7 @@ import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { SearchParamsContext } from 'next/dist/shared/lib/hooks-client-context.shared-runtime';
 import { string } from 'zod';
+import { fetchInvoicesPages } from '@/app/lib/data';
  
 export default async function Page({
   searchParams,
