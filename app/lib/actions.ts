@@ -3,6 +3,7 @@ import { z } from "zod";
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/dist/server/api-utils";
+import { NextApiResponse } from "next";
 
 const FormSchema = z.object({
     id: z.string(),
@@ -34,7 +35,7 @@ export async function createInvoice(formData: FormData) {
   revalidatePath('/dashboard/invoices');
 }
 
-export async function updateInvoice(id: string, formData: FormData) {
+export async function updateInvoice(id: string, formData: FormData, res: NextApiResponse) {
     const { customerId, amount, status } = UpdateInvoice.parse({
       customerId: formData.get('customerId'),
       amount: formData.get('amount'),
@@ -50,7 +51,7 @@ export async function updateInvoice(id: string, formData: FormData) {
     `;
 
     revalidatePath('/dashboard/invoices');
-    redirect('/dashboard/invoices');
+    redirect(res, 303, '/dashboard/invoices');
 }
 
 export async function deleteInvoice(id: string) {
