@@ -1,5 +1,6 @@
 'use server';
 import { z } from "zod";
+import { sql } from '@vercel/postgres';
 
 const FormSchema = z.object({
     id: z.string(),
@@ -19,4 +20,6 @@ export async function createInvoice(formData: FormData) {
     });
     //checking:
     // console.log(rawFormData);
+    const amountInCents = amount * 100;
+    const date = new Date().toISOString().split('T')[0];
 }
