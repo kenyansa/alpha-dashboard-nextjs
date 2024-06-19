@@ -1,3 +1,5 @@
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { lusitana } from '@/app/ui/fonts';
 import {
   AtSymbolIcon,
@@ -6,13 +8,21 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
-import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/actions';
 
 export default function LoginForm() {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      await authenticate(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <form action={dispatch} className="space-y-3">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
           Please log in to continue.
@@ -32,10 +42,13 @@ export default function LoginForm() {
                 type="email"
                 name="email"
                 placeholder="Enter your email address"
-                required
+                {...register('email', { required: true })}
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
+            {errors.email && (
+              <p className="text-sm text-red-500">Email is required.</p>
+            )}
           </div>
           <div className="mt-4">
             <label
@@ -51,23 +64,24 @@ export default function LoginForm() {
                 type="password"
                 name="password"
                 placeholder="Enter password"
-                required
-                minLength={6}
+                {...register('password', { required: true, minLength: 6 })}
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
+            {errors.password && (
+              <p className="text-sm text-red-500">
+                Password must be at least 6 characters long.
+              </p>
+            )}
           </div>
         </div>
-        <LoginButton />
-        <div className="flex h-8 items-end space-x-1"
-            aria-live="polite"
-            aria-atomic="true"
-            >
-              {/* form errors */}
-          {errorMessage && (
+        <LoginButton isSubmitting={isSubmitting} />
+        <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
+          {/* form errors */}
+          {errors.formError && (
             <>
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p className="text-sm text-red-500">{errorMessage}</p>
+              <p className="text-sm text-red-500">{errors.formError.message}</p>
             </>
           )}
         </div>
@@ -76,10 +90,9 @@ export default function LoginForm() {
   );
 }
 
-function LoginButton() {
-  const { pending } = useFormStatus();
+function LoginButton({ isSubmitting }) {
   return (
-    <Button className="mt-4 w-full" aria-disabled={pending}>
+    <Button className="mt-4 w-full" aria-disabled={isSubmitting}>
       Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
     </Button>
   );
